@@ -2,6 +2,8 @@ moreutils (0.71) UNRELEASED; urgency=medium
 
   * ts: Use the last provided switch if both -i and -s are provided
     Thanks, Mohammed Sadiq
+  * Makefile: Fix shell syntax error
+    Thanks, Nicolas Schier
 
  -- Joey Hess <id@joeyh.name>  Mon, 06 Jan 2025 16:39:26 -0400
 
