@@ -76,7 +76,7 @@ our $opt_S = '';
 getopts('evs:S:'); # only looks at options before the COMMAND
 
 if (! @ARGV) {
-	die "usage: chronic COMMAND...\n";
+	die "usage: chronic [-ev] [-s string] [-S string] COMMAND...\n";
 }
 
 my ($out, $err);
