@@ -6,7 +6,7 @@ chronic - runs a command quietly unless it fails
 
 =head1 SYNOPSIS
 
-chronic [-ev] COMMAND...
+chronic [-ev] [-s string] [-S string] COMMAND...
 
 =head1 DESCRIPTION
 
@@ -39,6 +39,18 @@ Without -e chronic needs non-zero return value to trigger output.
 In this mode, chronic's return value will be C<2> if the command's return
 value is C<0> but the command printed to stderr.
 
+=item -s string
+
+Stdout string triggering. Triggers output when the given string is found
+in stdout. chronic's return value will be C<3> if the command succeeded
+but stdout contained the string.
+
+=item -S string
+
+Negative stdout string triggering. Triggers output when the given string
+is NOT found in stdout. chronic's return value will be C<3> if the command
+succeeded but stdout did not contain the string.
+
 =back
 
 =head1 AUTHOR
@@ -59,7 +71,9 @@ use Getopt::Std;
 
 our $opt_e = 0;
 our $opt_v = 0;
-getopts('ev'); # only looks at options before the COMMAND
+our $opt_s = '';
+our $opt_S = '';
+getopts('evs:S:'); # only looks at options before the COMMAND
 
 if (! @ARGV) {
 	die "usage: chronic COMMAND...\n";
@@ -81,6 +95,14 @@ elsif ($ret != 0) { # child killed by signal
 elsif ($opt_e && (length($err) > 0)) {
 	showout();
 	exit 2;
+}
+elsif ($opt_s && index($out, $opt_s) != -1) {
+	showout();
+	exit 3;
+}
+elsif ($opt_S && index($out, $opt_S) == -1) {
+	showout();
+	exit 3;
 }
 else {
 	exit 0;
